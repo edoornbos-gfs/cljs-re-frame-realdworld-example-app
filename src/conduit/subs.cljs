@@ -67,3 +67,8 @@
  :user  ;; usage: (subscribe [:user])
  (fn [db _]
    (:user db)))
+
+(reg-sub
+ :session-set
+ (fn [db _]
+   (:session-set db)))

@@ -101,7 +101,8 @@
 (defn header
   []
   (let [user        @(subscribe [:user])
-        active-page @(subscribe [:active-page])]
+        active-page @(subscribe [:active-page])
+        session-set @(subscribe [:session-set])]
     [:nav.navbar.navbar-light
      [:div.container
       [:a.navbar-brand {:href (url-for :home)} "conduit"]
@@ -112,7 +113,10 @@
          [:li.nav-item
           [:a.nav-link {:href (url-for :login) :class (when (= active-page :login) "active")} "Sign in"]]
          [:li.nav-item
-          [:a.nav-link {:href (url-for :register) :class (when (= active-page :register) "active")} "Sign up"]]]
+          [:a.nav-link {:href (url-for :register) :class (when (= active-page :register) "active")} "Sign up"]]
+         [:li.nav-item
+          [:p.nav-link  (str "Articles read: " (count session-set))]]]
+
         [:ul.nav.navbar-nav.pull-xs-right
          [:li.nav-item
           [:a.nav-link {:href (url-for :home) :class (when (= active-page :home) "active")} "Home"]]
@@ -124,7 +128,9 @@
            [:i.ion-gear-a "Settings"]]]
          [:li.nav-item
           [:a.nav-link {:href (url-for :profile :user-id (:username user)) :class (when (= active-page :profile) "active")} (:username user)
-           [:img.user-pic {:src (:image user)}]]]])]]))
+           [:img.user-pic {:src (:image user)}]]]
+         [:li.nav-item
+          [:p.nav-link  (str "Articles read: " (count session-set))]]])]]))
 
 ;; -- Footer ------------------------------------------------------------------
 ;;

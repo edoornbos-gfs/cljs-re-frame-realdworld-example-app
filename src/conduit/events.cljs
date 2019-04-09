@@ -100,7 +100,8 @@
                 ;; -- URL @ "/article/:slug" -------------------------------------------
                 :article {:db         (assoc set-page :active-article slug)
                           :dispatch-n (list [:get-article-comments {:slug slug}]
-                                            [:get-user-profile {:profile (get-in db [:articles slug :author :username])}])}
+                                            [:get-user-profile {:profile (get-in db [:articles slug :author :username])}]
+                                            [:add-article-session-set slug])}
 
                 ;; -- URL @ "/profile/:slug" -------------------------------------------
                 :profile {:db         (assoc set-page :active-article slug)
@@ -532,3 +533,9 @@
  (fn-traced [{:keys [db]} [_ request-type response]]                                        ;; destructure to obtain request-type and response
             {:db (assoc-in db [:errors request-type] (get-in response [:response :errors])) ;; save in db so that we can display it to the user
              :dispatch [:complete-request request-type]}))
+
+(reg-event-db
+ :add-article-session-set
+ (fn-traced [db [_ slug]]
+            (let [current-set (set (get-in db [:session-set]))]
+              (assoc-in db [:session-set] (conj current-set slug)))))
